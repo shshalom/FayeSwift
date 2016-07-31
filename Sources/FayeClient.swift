@@ -34,6 +34,7 @@ public class FayeClient : TransportDelegate {
     
   public var fayeClientId:String?
   public weak var delegate:FayeClientDelegate?
+  public var connectionExtension:[String:AnyObject]?
   
   var transport:WebsocketTransport?
   var fayeConnected:Bool? {
@@ -43,13 +44,13 @@ public class FayeClient : TransportDelegate {
       }
     }
   }
-  
+ 
   var connectionInitiated:Bool?
   var messageNumber:UInt32 = 0
 
-  var queuedSubscriptions = Array<FayeSubscriptionModel>()
+  var queuedSubscriptions  = Array<FayeSubscriptionModel>()
   var pendingSubscriptions = Array<FayeSubscriptionModel>()
-  var openSubscriptions = Array<FayeSubscriptionModel>()
+  var openSubscriptions    = Array<FayeSubscriptionModel>()
 
   var channelSubscriptionBlocks = Dictionary<String, ChannelSubscriptionBlock>()
 
@@ -66,7 +67,7 @@ public class FayeClient : TransportDelegate {
   /// Default in 10 seconds
   let timeOut: Int
 
-  let readOperationQueue = dispatch_queue_create("com.hamin.fayeclient.read", DISPATCH_QUEUE_SERIAL)
+  let readOperationQueue  = dispatch_queue_create("com.hamin.fayeclient.read", DISPATCH_QUEUE_SERIAL)
   let writeOperationQueue = dispatch_queue_create("com.hamin.fayeclient.write", DISPATCH_QUEUE_CONCURRENT)
     
   // MARK: Init
@@ -146,7 +147,7 @@ public class FayeClient : TransportDelegate {
     return .SubscribingTo(model)
   }
     
-  public func subscribeToChannel(channel:String, block:ChannelSubscriptionBlock?=nil) -> FayeSubscriptionState {
+    public func subscribeToChannel(channel:String, ext:[String:AnyObject]? = nil,  block:ChannelSubscriptionBlock?=nil) -> FayeSubscriptionState {
     return subscribeToChannel(
         FayeSubscriptionModel(subscription: channel, clientId: fayeClientId),
         block: block

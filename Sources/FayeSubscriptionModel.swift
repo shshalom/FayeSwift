@@ -29,6 +29,8 @@ public class FayeSubscriptionModel {
     /// Uniqle client id for socket
     public var clientId: String?
     
+    public var connectionExtension:[String:AnyObject]?
+    
     /// Model must conform to Hashable
     public var hashValue: Int {
         return subscription.hashValue
@@ -39,8 +41,8 @@ public class FayeSubscriptionModel {
     
     public init(subscription: String, channel: BayeuxChannel=BayeuxChannel.Subscribe, clientId: String?) {
         self.subscription = subscription
-        self.channel = channel
-        self.clientId = clientId
+        self.channel      = channel
+        self.clientId     = clientId
     }
     
     // MARK:
@@ -68,9 +70,15 @@ public class FayeSubscriptionModel {
             throw FayeSubscriptionModelError.ClientIdNotValid
         }
         
-        return [Bayeux.Channel.rawValue: channel.rawValue,
-                Bayeux.ClientId.rawValue: clientId,
-                Bayeux.Subscription.rawValue: subscription]
+        var dict:Dictionary<String,AnyObject> = [Bayeux.Channel.rawValue: channel.rawValue,
+                    Bayeux.ClientId.rawValue: clientId,
+                    Bayeux.Subscription.rawValue: subscription]
+        
+        if let ext = self.connectionExtension {
+            dict[Bayeux.Extension.rawValue] = ext
+        }
+        
+        return dict
     }
 }
 

@@ -40,6 +40,7 @@ public enum Bayeux: String {
     case Successful = "successful"
     case Error = "error"
     case Advice = "advice"
+    case Extension = "ext"
 }
 
 // MARK: Private Bayuex Methods
@@ -100,10 +101,17 @@ extension FayeClient {
     // "channel": "/meta/subscribe",
     // "clientId": "Un1q31d3nt1f13r",
     // "subscription": "/foo/**"
-    func subscribe(var model:FayeSubscriptionModel) {
+    func subscribe(model:FayeSubscriptionModel) {
+        
+        let model = model
+            model.connectionExtension = self.connectionExtension
+        
+        
         dispatch_sync(writeOperationQueue) { [unowned self] in
             do {
                 let json = try model.jsonString()
+                
+                
                 
                 self.transport?.writeString(json)
                 self.pendingSubscriptions.append(model)
@@ -128,7 +136,9 @@ extension FayeClient {
     func unsubscribe(channel:String) {
         dispatch_sync(writeOperationQueue) { [unowned self] in
             if let clientId = self.fayeClientId {
-                let dict:[String:AnyObject] = [Bayeux.Channel.rawValue: BayeuxChannel.Unsubscibe.rawValue, Bayeux.ClientId.rawValue: clientId, Bayeux.Subscription.rawValue: channel]
+                let dict:[String:AnyObject] = [Bayeux.Channel.rawValue: BayeuxChannel.Unsubscibe.rawValue,
+                                               Bayeux.ClientId.rawValue: clientId,
+                                               Bayeux.Subscription.rawValue: channel]
                 
                 if let string = JSON(dict).rawString() {
                     self.transport?.writeString(string)
@@ -148,12 +158,15 @@ extension FayeClient {
         dispatch_sync(writeOperationQueue) { [weak self] in
             if let clientId = self?.fayeClientId, messageId = self?.nextMessageId()
                 where self?.fayeConnected == true {
-                let dict:[String:AnyObject] = [
+                var dict:Dictionary<String,AnyObject> = [
                     Bayeux.Channel.rawValue: channel,
                     Bayeux.ClientId.rawValue: clientId,
                     Bayeux.Id.rawValue: messageId,
-                    Bayeux.Data.rawValue: data
-                ]
+                    Bayeux.Data.rawValue: data]
+                
+                if let ext = self?.connectionExtension {
+                    dict[Bayeux.Extension.rawValue] = ext
+                }
                 
                 if let string = JSON(dict).rawString() {
                     print("Faye: Publish string: \(string)")
