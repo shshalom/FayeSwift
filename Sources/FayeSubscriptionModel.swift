@@ -29,7 +29,7 @@ public class FayeSubscriptionModel {
     /// Uniqle client id for socket
     public var clientId: String?
     
-    public var connectionExtension:[String:AnyObject]?
+    public var connectionExtension:[NSObject:AnyObject]?
     
     /// Model must conform to Hashable
     public var hashValue: Int {

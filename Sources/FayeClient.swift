@@ -34,7 +34,7 @@ public class FayeClient : TransportDelegate {
     
   public var fayeClientId:String?
   public weak var delegate:FayeClientDelegate?
-  public var connectionExtension:[String:AnyObject]?
+  public var connectionExtension:[NSObject:AnyObject]?
   
   var transport:WebsocketTransport?
   var fayeConnected:Bool? {
