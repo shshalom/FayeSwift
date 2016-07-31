@@ -147,7 +147,7 @@ public class FayeClient : TransportDelegate {
     return .SubscribingTo(model)
   }
     
-    public func subscribeToChannel(channel:String, ext:[String:AnyObject]? = nil,  block:ChannelSubscriptionBlock?=nil) -> FayeSubscriptionState {
+    public func subscribeToChannel(channel:String, block:ChannelSubscriptionBlock?=nil) -> FayeSubscriptionState {
     return subscribeToChannel(
         FayeSubscriptionModel(subscription: channel, clientId: fayeClientId),
         block: block
@@ -162,5 +162,11 @@ public class FayeClient : TransportDelegate {
     
     removeChannelFromOpenSubscriptions(channel)
     removeChannelFromPendingSubscriptions(channel)
+  }
+    
+  public func unsubscribeAll() {
+    for subscription in openSubscriptions {
+        unsubscribeFromChannel(subscription.subscription)
+    }
   }
 }
