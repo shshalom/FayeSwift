@@ -13,7 +13,7 @@ public enum subscriptionError: ErrorType {
 }
 
 // MARK: FayeClientDelegate Protocol
-public protocol FayeClientDelegate: NSObjectProtocol {
+public protocol FayeClientDelegate: class {
   func messageReceived(client:FayeClient, messageDict: NSDictionary, channel: String)
   func pongReceived(client:FayeClient)
   func connectedToServer(client:FayeClient)
