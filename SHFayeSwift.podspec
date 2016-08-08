@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
                        DESC
   s.homepage         = "https://github.com/shshalom/FayeSwift"
   s.license          = "MIT"
-  s.author           = { "Haris Amin" => "aminharis7@gmail.com" }
-  s.source           = { :git => "https://github.com/shshalom/FayeSwift.git", :tag => s.version.to_s }
+  s.author           = { "Shalom" => "shalom.shwaitzer@gmail.com" }
+  s.source           = { :git => "https://github.com/shshalom/FayeSwift.git", :tag => s.version }
   s.requires_arc = true
   s.osx.deployment_target = "10.9"
   s.ios.deployment_target = "8.0"
