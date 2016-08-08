@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "SHFayeSwift"
-  s.version          = "0.2.0"
+  s.version          = "0.2.1"
   s.summary          = "A pure Swift Faye (Bayeux) Client"
   s.description      = <<-DESC
                         A Pure Swift Client Library for the Faye (Bayeux/Comet) Pub-Sub messaging server.
